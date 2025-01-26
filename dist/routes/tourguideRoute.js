@@ -13,7 +13,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
-const Tourguide_1 = __importDefault(require("../models/Tourguide")); // تأكد من المسار الصحيح للنموذج الخاص بك
+const Tourguide_1 = __importDefault(require("../models/Tourguide"));
 const router = express_1.default.Router();
 //filter guides by price, rating, guideType, language
 router.get('/guides/search', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -34,7 +34,7 @@ router.get('/guides/search', (req, res) => __awaiter(void 0, void 0, void 0, fun
             query['rating'] = { $gte: Number(rating) };
         }
         //filter guideType
-        if (guideType) {
+        if (guideType && typeof guideType === 'string') {
             query['guideType'] = guideType;
         }
         // filter language
@@ -153,6 +153,7 @@ router.post('/guides/:id/addReview', (req, res) => __awaiter(void 0, void 0, voi
 }));
 // delete review by guide id and review id
 router.delete('/guides/:guideId/review/:reviewId', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a;
     try {
         const { guideId, reviewId } = req.params;
         const guide = yield Tourguide_1.default.findById(guideId);
@@ -163,7 +164,7 @@ router.delete('/guides/:guideId/review/:reviewId', (req, res) => __awaiter(void 
             });
             return;
         }
-        const reviewIndex = guide.reviews.findIndex((review) => review._id.toString() === reviewId);
+        const reviewIndex = (_a = guide.reviews) === null || _a === void 0 ? void 0 : _a.findIndex((review) => review._id.toString() === reviewId);
         if (reviewIndex === -1) {
             res.status(404).json({
                 success: false,
@@ -191,6 +192,50 @@ router.delete('/guides/:guideId/review/:reviewId', (req, res) => __awaiter(void 
         res.status(500).json({
             success: false,
             message: 'An error occurred while deleting the review',
+            error: errorMessage,
+        });
+    }
+}));
+router.delete('/guides/:tourGuideId/car/:carId', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a;
+    try {
+        const { tourGuideId, carId } = req.params;
+        const guide = yield Tourguide_1.default.findById(tourGuideId);
+        if (!guide) {
+            res.status(404).json({
+                success: false,
+                message: 'Guide not found',
+            });
+            return;
+        }
+        const carFound = ((_a = guide.car) === null || _a === void 0 ? void 0 : _a._id.toString()) === carId;
+        if (!carFound) {
+            res.status(404).json({
+                success: false,
+                message: 'Car not found',
+            });
+            return;
+        }
+        const updatedGuide = yield Tourguide_1.default.findByIdAndUpdate(tourGuideId, { $unset: { car: 1 } }, { new: true });
+        if (updatedGuide) {
+            res.status(200).json({
+                success: true,
+                message: 'Car deleted successfully',
+                data: updatedGuide,
+            });
+        }
+        else {
+            res.status(404).json({
+                success: false,
+                message: 'Guide or car not found',
+            });
+        }
+    }
+    catch (error) {
+        const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred';
+        res.status(500).json({
+            success: false,
+            message: 'An error occurred while deleting the car',
             error: errorMessage,
         });
     }

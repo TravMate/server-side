@@ -1,11 +1,13 @@
-import express, { Request, Response } from 'express';
+import { Request, Response } from 'express';
 import Guide,{ IGuide,IReview } from '../models/Tourguide'; 
-const router = express.Router();
+import { Router } from 'express';
+const router=Router();
+
 //filter guides by price, rating, guideType, language
 router.get('/guides/search', async (req: Request, res: Response) => {
   try {
     const { minPrice, maxPrice, rating, guideType, language } = req.query;
-
+      
     const query: Record<string, unknown> = {};
 
     if (minPrice || maxPrice) {
@@ -24,7 +26,7 @@ router.get('/guides/search', async (req: Request, res: Response) => {
     }
 
     //filter guideType
-    if (guideType) {
+    if (guideType && typeof guideType === 'string') {
       query['guideType'] = guideType;
     }
 
@@ -94,7 +96,6 @@ router.get('/guides/:id', async (req: Request, res: Response) => {
     try {
       const guideId = req.params.id; 
       const guide = await Guide.findById(guideId);
-  
       if (guide) {
         res.status(200).json({
           success: true,
@@ -116,6 +117,35 @@ router.get('/guides/:id', async (req: Request, res: Response) => {
       });
     }
   });
+  // Delete a single guide by id
+router.delete('/guides/:id', async (req: Request, res: Response) => {
+  try {
+    const guideId = req.params.id; 
+    const deletedGuide = await Guide.findByIdAndDelete(guideId);
+
+    if (deletedGuide) {
+      res.status(200).json({
+        success: true,
+        message: 'Guide deleted successfully',
+        data: deletedGuide, 
+      });
+    } else {
+      res.status(404).json({
+        success: false,
+        message: 'Guide not found',
+      });
+    }
+  } catch (error: unknown) {
+    const errorMessage =
+      error instanceof Error ? error.message : 'An unknown error occurred';
+    res.status(500).json({
+      success: false,
+      message: 'An error occurred while deleting the guide',
+      error: errorMessage,
+    });
+  }
+});
+
   //add new review To TourGuide 
 router.post('/guides/:id/addReview',async(req:Request,res:Response)=>{
     try {
@@ -162,7 +192,7 @@ router.delete('/guides/:guideId/review/:reviewId', async (req: Request, res: Res
         return;
       }
   
-      const reviewIndex = guide.reviews.findIndex((review) => review._id.toString() === reviewId);
+      const reviewIndex = guide.reviews?.findIndex((review) => review._id.toString() === reviewId);
   
       if (reviewIndex === -1) {
         res.status(404).json({
@@ -199,5 +229,89 @@ router.delete('/guides/:guideId/review/:reviewId', async (req: Request, res: Res
     }
   });
 
+   // delete car from tour guide
+  router.delete('/guides/:tourGuideId/car/:carId', async (req: Request, res: Response) => {
+    try {
+      const { tourGuideId, carId } = req.params;
+       const guide = await Guide.findById(tourGuideId);
+       if (!guide) {
+        res.status(404).json({
+          success: false,
+          message: 'Guide not found',
+        });
+        return;
+         }
+         const carFound = guide.car?._id.toString() === carId;
+       if (!carFound) {
+        res.status(404).json({
+          success: false,
+          message: 'Car not found',
+        });
+        return;
+       }
+       const updatedGuide = await Guide.findByIdAndUpdate(
+        tourGuideId, 
+        { car: null },  
+        { new: true }   
+      );
+      
+       if (updatedGuide) {
+        res.status(200).json({
+          success: true,
+          message: 'Car deleted successfully',
+          data: updatedGuide,
+        });
+       } else {
+        res.status(404).json({
+          success: false,
+          message: 'Guide or car not found',
+        });
+     
+        }
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error? error.message : 'An unknown error occurred';
+      res.status(500).json({
+        success: false,
+        message: 'An error occurred while deleting the car',
+        error: errorMessage,
+      });
+    }
+  });
 
+  //add car to tour guide
+  router.put('/guides/:tourGuideId/car', async (req: Request, res: Response) => {
+    try {
+      const { tourGuideId } = req.params;
+      const { model, carImage, yearMade, passengerNumber } = req.body;
+      const guide = await Guide.findByIdAndUpdate(
+        tourGuideId,
+        {  
+          car: { model, carImage, yearMade, passengerNumber },
+        }, 
+        { new: true }
+      )
+      
+      if (guide) {
+        res.status(200).json({
+          success: true,
+          message: 'Car added successfully',
+          data: guide,
+        });
+      } else {
+        res.status(404).json({
+          success: false,
+          message: 'Guide not found',
+        });
+        return;
+      }
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred';
+      res.status(500).json({
+        success: false,
+        message: 'An error occurred while adding the car',
+        error: errorMessage,
+      });
+    }
+  });
+  
 export default router;

@@ -1,7 +1,11 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = require("mongoose");
-// تعريف مخطط المراجعة
+const CarSchema = new mongoose_1.Schema({
+    model: { type: String, required: true },
+    yearMade: { type: Number, required: true },
+    passengerNumber: { type: Number, required: true },
+});
 const reviewSchema = new mongoose_1.Schema({
     _id: { type: mongoose_1.Schema.Types.ObjectId, default: () => new mongoose_1.Types.ObjectId() }, // التعديل هنا باستخدام Types.ObjectId
     name: { type: String, required: true },
@@ -10,7 +14,6 @@ const reviewSchema = new mongoose_1.Schema({
     date: { type: Date, default: Date.now },
     rating: { type: Number, required: true, min: 1, max: 5 },
 }, { _id: true });
-// تعريف مخطط المرشد السياحي
 const guideSchema = new mongoose_1.Schema({
     name: { type: String, required: true },
     price: { type: Number, required: true }, // تعديل السعر هنا
@@ -22,8 +25,8 @@ const guideSchema = new mongoose_1.Schema({
     availabilityDates: { type: [Date], required: true },
     cities: { type: [String], required: true },
     isAvailable: { type: Boolean, default: true },
+    car: { type: CarSchema, required: false },
     reviews: { type: [reviewSchema], default: [] },
 }, { timestamps: true });
-// إنشاء الـ Model
 const Guide = (0, mongoose_1.model)('TourGuide', guideSchema);
 exports.default = Guide;

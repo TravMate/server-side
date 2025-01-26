@@ -1,6 +1,12 @@
 import { Schema, model, Document, Types } from 'mongoose';
 
-
+export interface ICar {
+  _id: Types.ObjectId;
+  model: string;
+  carImage:string;
+  yearMade: number;
+  passengerNumber: number;
+}
 export interface IReview {
   _id: Types.ObjectId;
   name: string;
@@ -22,12 +28,18 @@ export interface IGuide extends Document {
   availabilityDates: Date[];
   cities: string[];
   isAvailable: boolean;
-  reviews: IReview[];
+  car?: ICar; 
+  reviews ?: IReview[];
 }
-
+const CarSchema: Schema = new Schema({
+ _id: { type: Schema.Types.ObjectId, default: () => new Types.ObjectId() },  
+  model: { type: String, required: true },
+  yearMade: { type: Number, required: true },
+  passengerNumber: { type: Number, required: true },
+}, { _id: true });
 
 const reviewSchema = new Schema<IReview>({
-  _id: { type: Schema.Types.ObjectId, default: () => new Types.ObjectId() }, // التعديل هنا باستخدام Types.ObjectId
+  _id: { type: Schema.Types.ObjectId, default: () => new Types.ObjectId() }, 
   name: { type: String, required: true },
   image: { type: String, required: true },
   comment: { type: String, required: true },
@@ -47,6 +59,7 @@ const guideSchema = new Schema<IGuide>({
   availabilityDates: { type: [Date], required: true },
   cities: { type: [String], required: true },
   isAvailable: { type: Boolean, default: true },
+  car: { type: CarSchema, required: false },
   reviews: { type: [reviewSchema], default: [] },
 }, { timestamps: true });
 
