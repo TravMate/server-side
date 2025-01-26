@@ -1,5 +1,5 @@
 import express, { Request, Response } from 'express';
-import Guide,{ IGuide,IReview } from '../models/Tourguide';  // تأكد من المسار الصحيح للنموذج الخاص بك
+import Guide,{ IGuide,IReview } from '../models/Tourguide'; 
 const router = express.Router();
 //filter guides by price, rating, guideType, language
 router.get('/guides/search', async (req: Request, res: Response) => {

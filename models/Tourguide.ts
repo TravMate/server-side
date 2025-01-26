@@ -1,8 +1,8 @@
 import { Schema, model, Document, Types } from 'mongoose';
 
-// تعريف المراجعة
+
 export interface IReview {
-  _id: Types.ObjectId; // استخدام Types.ObjectId بدلاً من Schema.Types.ObjectId
+  _id: Types.ObjectId;
   name: string;
   image: string;
   comment: string;
@@ -10,7 +10,7 @@ export interface IReview {
   rating: number;
 }
 
-// تعريف واجهة المرشد السياحي
+
 export interface IGuide extends Document {
   name: string;
   price: number; 
@@ -25,7 +25,7 @@ export interface IGuide extends Document {
   reviews: IReview[];
 }
 
-// تعريف مخطط المراجعة
+
 const reviewSchema = new Schema<IReview>({
   _id: { type: Schema.Types.ObjectId, default: () => new Types.ObjectId() }, // التعديل هنا باستخدام Types.ObjectId
   name: { type: String, required: true },
@@ -35,7 +35,7 @@ const reviewSchema = new Schema<IReview>({
   rating: { type: Number, required: true, min: 1, max: 5 },
 }, { _id: true });
 
-// تعريف مخطط المرشد السياحي
+
 const guideSchema = new Schema<IGuide>({
   name: { type: String, required: true },
   price: { type: Number, required: true },  // تعديل السعر هنا
@@ -50,7 +50,7 @@ const guideSchema = new Schema<IGuide>({
   reviews: { type: [reviewSchema], default: [] },
 }, { timestamps: true });
 
-// إنشاء الـ Model
+
 const Guide = model<IGuide>('TourGuide', guideSchema);
 
 export default Guide;
