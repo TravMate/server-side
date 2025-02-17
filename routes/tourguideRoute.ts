@@ -117,6 +117,36 @@ router.get('/guides/:id', async (req: Request, res: Response) => {
       });
     }
   });
+  // Update a single guide by id
+  router.put('/guides/:id', async (req: Request, res: Response) => {
+    try {
+      const guideId = req.params.id;
+      const updatedGuide = await Guide.findByIdAndUpdate(
+        guideId,
+        req.body,
+        { new: true }
+      );
+      if (updatedGuide) {
+        res.status(200).json({
+          success: true,
+          data: updatedGuide,
+        });
+      } else {
+        res.status(404).json({
+          success: false,
+          message: 'Guide not found',
+        });
+      }
+    } catch (error: unknown) {
+      const errorMessage =
+        error instanceof Error? error.message : 'An unknown error occurred';
+      res.status(500).json({
+        success: false,
+        message: 'An error occurred while updating the guide',
+        error: errorMessage,
+      });
+    }
+  });
   // Delete a single guide by id
 router.delete('/guides/:id', async (req: Request, res: Response) => {
   try {
@@ -309,6 +339,37 @@ router.delete('/guides/:guideId/review/:reviewId', async (req: Request, res: Res
       res.status(500).json({
         success: false,
         message: 'An error occurred while adding the car',
+        error: errorMessage,
+      });
+    }
+  });
+  //add new tourguide
+  router.post('/addguides', async (req: Request, res: Response) => {
+    try {
+      const { name, price, rating, guideType, languages, image, description, availabilityDates, cities, isAvailable } = req.body;
+      const newGuide = await new Guide({
+        name,
+        price,
+        rating,
+        guideType,
+        languages,
+        image,
+        description,
+        availabilityDates,
+        cities,
+        isAvailable,
+      }).save();
+      
+      res.status(201).json({
+        success: true,
+        message: 'Guide added successfully',
+        data: newGuide,
+      });
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error? error.message : 'An unknown error occurred';
+      res.status(500).json({
+        success: false,
+        message: 'An error occurred while adding the guide',
         error: errorMessage,
       });
     }
