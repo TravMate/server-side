@@ -1,3 +1,5 @@
+first you have to clone from the next steps
+1- git clone 
 <h1>tour guide Routes</h1>   <br>
 1- get All Tour guide  (GET)   <br>
 http://localhost:3000/guides  <br>
