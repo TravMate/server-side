@@ -1,11 +1,11 @@
-first you have to clone from the next steps <br>
+💕💕first you have to clone from the next steps 💕💕 <br>
 <h1> 1-git clone https://github.com/TravMate/server-side.git</h1> <br>
 2-create file .env that contain <br>
 =>PORT=8080   <br>
 =>MONGODB_URI=mongodb+srv://ibrahimabokhalil05:1234@cluster0.zlkb9.mongodb.net/projectTypescript <br>
 =>JWT_SECRET=123456789sf  <br>
 3-npm install
-
+🤞🤞🤞🤞🤞🤞🤞🤞🤞🤞🤞🤞🤞🤞🤞🤞🤞
 <h1>tour guide Routes</h1>   <br>
 1- get All Tour guide  (GET)   <br>
 http://localhost:3000/guides  <br>
@@ -27,7 +27,7 @@ http://localhost:3000/guides/:tourguideId/car/:carId   <br>
 http://localhost:3000/guides  <br>
 10-update single guide   <br>
 http://localhost:3000/guides/:id
-
+💖💖💖💖💖💖💖💖💖💖💖💖💖💖💖
 <h1>cities Routes </h1>      <br>
 1- get all users   (GET)        <br>
 http://localhost:3000/users    <br>
@@ -39,7 +39,7 @@ http://localhost:3000/users/:id      <br>
 http://localhost:3000/users/:id    <br>
 5- login admin   (POST)<br>
 http://localhost:3000/loginAdmin   <br>
-
+🙌🙌🙌🙌🙌🙌🙌🙌🙌🙌🙌🙌🙌🙌🙌🙌
 <h1>places Routes </h1>      <br>
 1- get all places   (GET)        <br>
 http://localhost:3000/places    <br>
