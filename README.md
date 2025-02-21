@@ -1,5 +1,5 @@
 first you have to clone from the next steps <br>
-1- <h1>git clone https://github.com/TravMate/server-side.git</h1> <br>
+<h1> 1-git clone https://github.com/TravMate/server-side.git</h1> <br>
 2- create file .env that contain <br>
 3-PORT=8080   <br>
 MONGODB_URI=mongodb+srv://ibrahimabokhalil05:1234@cluster0.zlkb9.mongodb.net/projectTypescript <br>
