@@ -21,7 +21,12 @@ http://localhost:3000/guides/:tourguideId/review/:reviewId  <br>
 7-add car to tour guide (PUT)   <br>
 http://localhost:3000/guides/:tourguideId/car   <br>
 8- remove car from tour guide (DELETE)    <br>
-http://localhost:3000/guides/:tourguideId/car/:carId
+http://localhost:3000/guides/:tourguideId/car/:carId   <br>
+9- add new tourguide   <br>
+http://localhost:3000/guides  <br>
+10-update single guide   <br>
+http://localhost:3000/guides/:id
+
 <h1>cities Routes </h1>
 
 
