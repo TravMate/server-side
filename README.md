@@ -1,9 +1,9 @@
 first you have to clone from the next steps <br>
 <h1> 1-git clone https://github.com/TravMate/server-side.git</h1> <br>
 2-create file .env that contain <br>
-PORT=8080   <br>
-MONGODB_URI=mongodb+srv://ibrahimabokhalil05:1234@cluster0.zlkb9.mongodb.net/projectTypescript <br>
-JWT_SECRET=123456789sf  <br>
+=>PORT=8080   <br>
+=>MONGODB_URI=mongodb+srv://ibrahimabokhalil05:1234@cluster0.zlkb9.mongodb.net/projectTypescript <br>
+=>JWT_SECRET=123456789sf  <br>
 
 <h1>tour guide Routes</h1>   <br>
 1- get All Tour guide  (GET)   <br>
